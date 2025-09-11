@@ -439,7 +439,7 @@ function App() {
             <div className="absolute inset-0 bg-black/30 rounded-full"></div>
 
             {/* 播放按钮 - 移动端适配 */}
-            <div className="relative z-10 w-20 h-20 sm:w-28 sm:h-38 rounded-full flex items-center justify-center" style={{
+            <div className="relative z-10 w-20 h-20 sm:w-38 sm:h-38 rounded-full flex items-center justify-center" style={{
               backgroundImage: musicInfo.cover ? `url(${musicInfo.cover})` : 'none',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
@@ -483,7 +483,7 @@ function App() {
               <div className="h-16 sm:h-24"></div>
               <div className="text-gray-400 text-xs sm:text-sm">
                 {typeof musicInfo.lyrics === 'string' ? (
-                  musicInfo.lyrics.split('\n').map((line: string, index: number) => (
+                  musicInfo.lyrics.split('\\n').map((line: string, index: number) => (
                     <div key={index} className="mb-1">{line}</div>
                   ))
                 ) : (
@@ -522,7 +522,7 @@ function App() {
       </div>
 
       {/* 底部按钮区域 - 移动端适配 */}
-      <div className="absolute bottom-10 left-0 right-0 bg-gradient-to-t from-black via-black/80 to-transparent h-48 sm:h-60 flex items-end justify-center pb-4 sm:pb-8">
+      <div className="absolute bottom-10 sm:bottom-20 left-0 right-0 bg-gradient-to-t from-black via-black/80 to-transparent h-48 sm:h-60 flex items-end justify-center pb-4 sm:pb-8">
         <div className="flex space-x-3 sm:space-x-4 w-full max-w-xs sm:max-w-sm px-4 sm:px-6">
           <button
             className="flex-1 bg-transparent border border-primary text-white py-2.5 sm:py-3 rounded-xl font-medium text-sm sm:text-base active:bg-white/10 transition-all duration-200 touch-manipulation"
