@@ -402,7 +402,7 @@ function App() {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <img
-              src="/musishare/images/logos/logo.png"
+              src="/melon-music-share/images/logos/logo.png"
               alt="Logo"
               className="w-6 h-6 sm:w-8 sm:h-8"
             />
@@ -427,17 +427,24 @@ function App() {
           <div
             className="w-32 h-32 sm:w-40 sm:h-40 bg-gradient-to-br from-gray-800 to-gray-900 rounded-full flex items-center justify-center relative overflow-hidden"
             style={{
-              backgroundImage: musicInfo.cover ? `url(${musicInfo.cover})` : 'none',
+              // backgroundImage: musicInfo.cover ? `url(${musicInfo.cover})` : 'none',
+              backgroundImage: 'url(/melon-music-share/images/icons/play_bg.png)',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat'
             }}
           >
+
             {/* 添加半透明遮罩层，确保播放按钮可见 */}
             <div className="absolute inset-0 bg-black/30 rounded-full"></div>
 
             {/* 播放按钮 - 移动端适配 */}
-            <div className="relative z-10">
+            <div className="relative z-10 w-20 h-20 sm:w-28 sm:h-38 rounded-full flex items-center justify-center" style={{
+              backgroundImage: musicInfo.cover ? `url(${musicInfo.cover})` : 'none',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat'
+            }}>
               <button
                 onClick={togglePlay}
                 className="w-10 h-10 sm:w-12 sm:h-12 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-black/70 active:bg-black/80 transition-all duration-300 touch-manipulation"
@@ -449,21 +456,22 @@ function App() {
               </button>
             </div>
           </div>
+
         </div>
 
         {/* 音乐信息 - 移动端适配 */}
-        <div className="text-center mb-6 sm:mb-8 px-2">
+        {/* <div className="text-center mb-6 sm:mb-8 px-2">
           <h2 className="text-white text-lg sm:text-xl font-bold mb-1 sm:mb-2 leading-tight">
             {musicInfo.title}
           </h2>
           <p className="text-gray-400 text-xs sm:text-sm">{musicInfo.genres?.join(',')}</p>
-        </div>
+        </div> */}
 
         {/* 歌词轮播播放 - 移动端适配 */}
         <div className="w-full max-w-xs sm:max-w-sm text-center mb-6 sm:mb-8 px-2">
           <div
             ref={lyricsContainerRef}
-            className="rounded-lg p-3 sm:p-4 max-h-40 sm:max-h-48 overflow-y-auto custom-scrollbar"
+            className="rounded-lg p-3 sm:p-4 max-h-60 sm:max-h-478 overflow-y-auto custom-scrollbar"
             style={{
               scrollBehavior: 'auto',
               scrollbarWidth: 'none',
@@ -473,8 +481,13 @@ function App() {
             <div className="space-y-3 sm:space-y-4">
               {/* 顶部空白区域 */}
               <div className="h-16 sm:h-24"></div>
-
-              {lyricArr.length > 0 ?
+              <div className="text-gray-400 text-xs sm:text-sm">
+                {musicInfo.lyrics?.split('\\n').map((line, index) => (
+                  <div key={index}>{line}</div>
+                ))}
+              </div>
+              {/* 滚动播放歌词 */}
+              {/* {lyricArr.length > 0 ?
                 lyricArr.map((line, index) => (
                   <div
                     key={index}
@@ -495,7 +508,7 @@ function App() {
                 )) : (
                   <div className="text-gray-400 text-xs sm:text-sm">暂无歌词</div>
                 )
-              }
+              } */}
 
               {/* 底部空白区域 */}
               <div className="h-16 sm:h-24"></div>
@@ -505,7 +518,7 @@ function App() {
       </div>
 
       {/* 底部按钮区域 - 移动端适配 */}
-      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/80 to-transparent h-48 sm:h-60 flex items-end justify-center pb-4 sm:pb-8">
+      <div className="absolute bottom-10 left-0 right-0 bg-gradient-to-t from-black via-black/80 to-transparent h-48 sm:h-60 flex items-end justify-center pb-4 sm:pb-8">
         <div className="flex space-x-3 sm:space-x-4 w-full max-w-xs sm:max-w-sm px-4 sm:px-6">
           <button
             className="flex-1 bg-transparent border border-primary text-white py-2.5 sm:py-3 rounded-xl font-medium text-sm sm:text-base active:bg-white/10 transition-all duration-200 touch-manipulation"

@@ -20,7 +20,7 @@ export const MELON_APP_CONFIG: AppLaunchConfig = {
   androidPlayStoreUrl: 'https://play.google.com/store/apps/details?id=com.melon.app', // 需要替换为实际的Google Play链接
   webUrl: 'https://melon.app',
   appName: 'Melon',
-  appIcon: '/musishare/images/logos/logo.png',
+  appIcon: '/melon-music-share/images/logos/logo.png',
   description: '发现好音乐，分享好心情'
 };
 
