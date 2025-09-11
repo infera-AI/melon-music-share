@@ -471,7 +471,7 @@ function App() {
         <div className="w-full max-w-xs sm:max-w-sm text-center mb-6 sm:mb-8 px-2">
           <div
             ref={lyricsContainerRef}
-            className="rounded-lg p-3 sm:p-4 max-h-60 sm:max-h-478 overflow-y-auto custom-scrollbar"
+            className="rounded-lg p-3 sm:p-4 max-h-60 sm:max-h-80 overflow-y-auto custom-scrollbar"
             style={{
               scrollBehavior: 'auto',
               scrollbarWidth: 'none',
@@ -482,9 +482,13 @@ function App() {
               {/* 顶部空白区域 */}
               <div className="h-16 sm:h-24"></div>
               <div className="text-gray-400 text-xs sm:text-sm">
-                {musicInfo.lyrics?.split('\\n').map((line, index) => (
-                  <div key={index}>{line}</div>
-                ))}
+                {typeof musicInfo.lyrics === 'string' ? (
+                  musicInfo.lyrics.split('\n').map((line: string, index: number) => (
+                    <div key={index} className="mb-1">{line}</div>
+                  ))
+                ) : (
+                  <div>暂无歌词</div>
+                )}
               </div>
               {/* 滚动播放歌词 */}
               {/* {lyricArr.length > 0 ?
