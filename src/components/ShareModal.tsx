@@ -1,11 +1,11 @@
 // 分享模态框组件 - 模仿酷狗音乐分享功能
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  FaTimes, 
-  FaWeixin, 
-  FaQq, 
-  FaWeibo, 
+import {
+  FaTimes,
+  FaWeixin,
+  FaQq,
+  FaWeibo,
   FaQrcode,
   FaCopy,
 
@@ -20,7 +20,7 @@ interface ShareModalProps {
 
 const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, music }) => {
   const shareUrl = `${window.location.origin}/share/${music.id}`;
-  
+
   const shareOptions = [
     {
       name: '微信',
@@ -102,7 +102,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, music }) => {
             {/* 音乐信息 */}
             <div className="flex items-center mb-6 p-4 bg-gradient-to-r from-primary/10 to-accent/10 rounded-2xl">
               <img
-                src={music.coverUrl}
+                src={music.cover}
                 alt={music.title}
                 className="w-16 h-16 rounded-lg object-cover mr-4"
               />

@@ -5,6 +5,7 @@ import ShareModal from './components/ShareModal';
 import { getRandomMusic } from './data/mockData';
 import { MusicInfo } from './types/music';
 import { openApp, melonAppConfig } from './utils/appLauncher';
+import { getShareKeyFromUrl, fetchMusicByShareKey } from './utils/shareKeyHandler';
 
 // 歌词行类型
 type LyricLine = {
@@ -102,32 +103,6 @@ function App() {
     return [];
   }, [musicInfo.lyrics]);
 
-  // 从URL参数获取音乐数据
-  const getMusicDataFromUrl = () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const musicDataStr = urlParams.get('musicData');
-
-    if (musicDataStr) {
-      try {
-        return JSON.parse(musicDataStr);
-      } catch (error) {
-        console.error('解析音乐数据失败:', error);
-      }
-    }
-
-    // 如果没有musicData参数，尝试从其他参数构建
-    const musicData = {
-      id: Number(urlParams.get('workId')) || 0,
-      title: urlParams.get('workTitle') || '',
-      cover: urlParams.get('workCover') || '',
-      url: urlParams.get('workUrl') || '',
-      genres: urlParams.get('workGenres')?.split(',') || [],
-      lyrics: urlParams.get('workLyrics') || '',
-    };
-
-    setMusicInfo(musicData);
-    return musicData;
-  };
 
   // 音频事件处理
   const handleTimeUpdate = () => {
@@ -243,141 +218,32 @@ function App() {
 
   // 初始化音乐数据
   useEffect(() => {
-    const musicData = getMusicDataFromUrl();
-    console.log('音乐数据:', musicData);
+    const initializeMusicData = async () => {
+      // 首先检查是否有分享密钥
+      const shareKey = getShareKeyFromUrl();
 
-    // 如果没有URL参数，使用默认的测试数据
-    if (!musicData.url) {
-      setMusicInfo({
-        id: 1,
-        title: '测试歌曲',
-        cover: '',
-        url: 'https://cdn.mureka.cn/cos-prod/open/song/20250818/85320288698369-BcUnw88rH9HmRhmPJNX8ve.mp3',
-        genres: [],
-        lyrics: [
-          {
-            "startTime": 31.16,
-            "endTime": 37.52,
-            "text": "老照片里是你我笑颜如花"
-          },
-          {
-            "startTime": 38.08,
-            "endTime": 45.36,
-            "text": "旧书信里藏着思念无价"
-          },
-          {
-            "startTime": 45.92,
-            "endTime": 50,
-            "text": "熟悉的味道飘过每个角落"
-          },
-          {
-            "startTime": 51.44,
-            "endTime": 56.88,
-            "text": "那些日子温暖又甜蜜"
-          },
-          {
-            "startTime": 61.64,
-            "endTime": 68.12,
-            "text": "时光匆匆带走多少记忆"
-          },
-          {
-            "startTime": 68.76,
-            "endTime": 75.72,
-            "text": "心中留下的只有温柔"
-          },
-          {
-            "startTime": 76.12,
-            "endTime": 81.04,
-            "text": "回忆里的你我未曾离去"
-          },
-          {
-            "startTime": 81.6,
-            "endTime": 87.8,
-            "text": "在每个梦里轻轻低语"
-          },
-          {
-            "startTime": 90.68,
-            "endTime": 98.8,
-            "text": "夕阳下我们曾许下诺言"
-          },
-          {
-            "startTime": 100,
-            "endTime": 103.32,
-            "text": "如今只剩下风中的誓言"
-          },
-          {
-            "startTime": 106.4,
-            "endTime": 113.28,
-            "text": "那些温暖的时光不遥远"
-          },
-          {
-            "startTime": 113.96,
-            "endTime": 118.76,
-            "text": "只是藏在心底最柔软"
-          },
-          {
-            "startTime": 137.8,
-            "endTime": 144.28,
-            "text": "熟悉的街角有我们笑声"
-          },
-          {
-            "startTime": 145,
-            "endTime": 151.8,
-            "text": "如今只剩雨后的空巷"
-          },
-          {
-            "startTime": 152.32,
-            "endTime": 159.72,
-            "text": "每一片落叶都藏着故事"
-          },
-          {
-            "startTime": 160.2,
-            "endTime": 164.48,
-            "text": "每一道晚霞都是过往"
-          },
-          {
-            "startTime": 167.32,
-            "endTime": 172.32,
-            "text": "那些年的梦想如今何方"
-          },
-          {
-            "startTime": 174.24,
-            "endTime": 180,
-            "text": "是否还记得最初的向往"
-          },
-          {
-            "startTime": 182.08,
-            "endTime": 189.88,
-            "text": "虽然时光带走了模样"
-          },
-          {
-            "startTime": 190.2,
-            "endTime": 196.84,
-            "text": "那份纯真却永远难忘"
-          },
-          {
-            "startTime": 197.8,
-            "endTime": 204.64,
-            "text": "温暖的回忆照亮夜晚"
-          },
-          {
-            "startTime": 205.44,
-            "endTime": 212.32,
-            "text": "即使孤单也不再害怕"
-          },
-          {
-            "startTime": 213.08,
-            "endTime": 219.96,
-            "text": "那些过去的日子多美好"
-          },
-          {
-            "startTime": 220.92,
-            "endTime": 224.6,
-            "text": "心中有爱就不再彷徨"
+      if (shareKey) {
+        try {
+          const result = await fetchMusicByShareKey(shareKey);
+          if (result.success && result.music) {
+            const musicInfo = result.music;
+            console.log(result);
+            setMusicInfo({
+              id: parseInt(musicInfo.id) || 1,
+              title: musicInfo.title,
+              cover: musicInfo.cover || '',
+              url: musicInfo.cover_url || musicInfo.music_url || '',
+              genres: musicInfo.genres || [],
+              lyrics: musicInfo.lyrics
+            });
+            return;
           }
-        ]
-      });
-    }
+        } catch (error) {
+          // 静默处理错误，使用默认数据
+        }
+      }
+    };
+    initializeMusicData();
   }, []);
 
   // 打开Melon APP
@@ -460,12 +326,12 @@ function App() {
         </div>
 
         {/* 音乐信息 - 移动端适配 */}
-        {/* <div className="text-center mb-6 sm:mb-8 px-2">
+        <div className="text-center mb-6 sm:mb-8 px-2">
           <h2 className="text-white text-lg sm:text-xl font-bold mb-1 sm:mb-2 leading-tight">
             {musicInfo.title}
           </h2>
-          <p className="text-gray-400 text-xs sm:text-sm">{musicInfo.genres?.join(',')}</p>
-        </div> */}
+          {/* <p className="text-gray-400 text-xs sm:text-sm">{musicInfo.genres?.join(',')}</p> */}
+        </div>
 
         {/* 歌词轮播播放 - 移动端适配 */}
         <div className="w-full max-w-xs sm:max-w-sm text-center mb-6 sm:mb-8 px-2">
@@ -483,7 +349,7 @@ function App() {
               <div className="h-16 sm:h-24"></div>
               <div className="text-gray-400 text-xs sm:text-sm">
                 {typeof musicInfo.lyrics === 'string' ? (
-                  musicInfo.lyrics.split('\\n').map((line: string, index: number) => (
+                  musicInfo.lyrics.split('\n').map((line: string, index: number) => (
                     <div key={index} className="mb-1">{line}</div>
                   ))
                 ) : (

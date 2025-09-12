@@ -10,15 +10,16 @@ export interface MusicInfo {
   title: string;
   artist: string;
   album: string;
-  coverUrl: string;
-  audioUrl: string;
+  cover: string;
+  cover_url: string;
+  music_url: string;
   duration: number;
-  lyrics: string[] | LyricsLine[];
+  lyrics: string;
   playCount: number;
   likeCount: number;
   shareCount: number;
   commentCount: number;
-  tags: string[];
+  genres: string[];
   releaseDate: string;
 }
 
