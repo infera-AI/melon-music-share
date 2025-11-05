@@ -1,7 +1,8 @@
 // 环境变量配置
 export const ENV = {
   // API 配置
-  API_BASE_URL: (import.meta as any).env?.VITE_API_BASE_URL || 'http://218.244.147.232:80/api',
+  // API_BASE_URL: (import.meta as any).env?.VITE_API_BASE_URL || 'http://218.244.147.232:80/api',
+  API_BASE_URL: (import.meta as any).env?.VITE_API_BASE_URL || ' https://api.sinobiz.biz/api/',
   API_TIMEOUT: Number((import.meta as any).env?.VITE_API_TIMEOUT) || 10000,
   
   // 应用配置
